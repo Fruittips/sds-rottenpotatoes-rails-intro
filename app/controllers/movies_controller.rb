@@ -19,7 +19,8 @@ class MoviesController < ApplicationController
     end
 
     #retrieve only selected movies based on ratings
-    @movies = Movie.with_ratings(@ratings_to_show_hash)
+    # @movies = Movie.with_ratings(@ratings_to_show_hash)
+    @movies = Movie.all
     
   end
 
