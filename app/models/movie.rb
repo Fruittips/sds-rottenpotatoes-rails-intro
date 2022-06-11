@@ -1,11 +1,10 @@
 class Movie < ActiveRecord::Base
 
-  # def initialize
-  #   @all_ratings = ['G','PG','PG-13','R']
-  # end
-
-  def all_ratings
-    @all_ratings
+  def self.all_ratings
+    @all_ratings = []
+    self.all.each {|movie| 
+      @all_ratings |= [movie[:rating]]}
+    return @all_ratings
   end
 
   def self.with_ratings(ratings_list)
