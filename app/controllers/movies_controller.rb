@@ -12,6 +12,8 @@ class MoviesController < ApplicationController
     @ratings_to_show_hash = []
 
     hash_ratings = params[:ratings]
+    puts 'hash_ratings is: '
+    puts hash_ratings
     if (!hash_ratings.nil?)
       params[:ratings].each_key {|key|
       @ratings_to_show_hash.append(key)}
@@ -19,6 +21,16 @@ class MoviesController < ApplicationController
 
     #retrieve only selected movies based on ratings
     @movies = Movie.with_ratings(@ratings_to_show_hash)
+    
+    if (!params[:sort].blank?) || (!params[:sort].nil?)
+      @movies = Movie.with_ratings(@ratings_to_show_hash).order(params[:sort])
+      if params[:sort] == "title"
+        @title_header = 'hilite bg-warning'
+      elsif params[:sort] == "release_date"
+        @release_date_header = 'hilite bg-warning' 
+      end
+    end
+
   end
 
   def new
