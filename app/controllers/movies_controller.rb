@@ -7,7 +7,20 @@ class MoviesController < ApplicationController
   end
 
   def index
-    @movies = Movie.all
+    m = Movie.new
+    @all_ratings = m.all_ratings
+    @ratings_to_show_hash = []
+    puts 'in index'
+    puts @all_ratings
+    hash_ratings = params[:ratings]
+    if (!hash_ratings.nil?)
+      params[:ratings].each_key {|key|
+      @ratings_to_show_hash.append(key)}
+    end
+
+    #retrieve only selected movies based on ratings
+    @movies = Movie.with_ratings(@ratings_to_show_hash)
+    
   end
 
   def new
