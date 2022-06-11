@@ -12,11 +12,10 @@ class MoviesController < ApplicationController
     @ratings_to_show_hash = []
 
     hash_ratings = params[:ratings]
-    puts 'hash_ratings is: '
-    puts hash_ratings
     if (!hash_ratings.nil?)
       params[:ratings].each_key {|key|
       @ratings_to_show_hash.append(key)}
+      session[:ratings] = @ratings_to_show_hash
     end
 
     #retrieve only selected movies based on ratings
@@ -29,7 +28,24 @@ class MoviesController < ApplicationController
       elsif params[:sort] == "release_date"
         @release_date_header = 'hilite bg-warning' 
       end
+      session[:sort] = params[:sort]
     end
+
+    if !session[:ratings].blank? || !session[:sort].blank?
+      puts "yes it exist"
+      puts session[:ratings]
+      puts session[:sort]
+
+      @ratings_to_show_hash = session[:ratings]
+      sort_param = session[:sort]
+      @movies = Movie.with_ratings(@ratings_to_show_hash).order(sort_param)
+      if sort_param == "title"
+        @title_header = 'hilite bg-warning'
+      elsif sort_param == "release_date"
+        @release_date_header = 'hilite bg-warning' 
+      end
+
+    end 
 
   end
 
