@@ -9,10 +9,11 @@ class MoviesController < ApplicationController
   def index
     
     @all_ratings = Movie.all_ratings
-    @ratings_to_show_hash = []
+    @ratings_to_show_hash = @all_ratings
 
     hash_ratings = params[:ratings]
     if (!hash_ratings.nil?)
+      @ratings_to_show_hash = []
       params[:ratings].each_key {|key|
       @ratings_to_show_hash.append(key)}
       session[:ratings] = @ratings_to_show_hash
@@ -32,10 +33,6 @@ class MoviesController < ApplicationController
     end
 
     if !session[:ratings].blank? || !session[:sort].blank?
-      puts "yes it exist"
-      puts session[:ratings]
-      puts session[:sort]
-
       @ratings_to_show_hash = session[:ratings]
       sort_param = session[:sort]
       @movies = Movie.with_ratings(@ratings_to_show_hash).order(sort_param)
